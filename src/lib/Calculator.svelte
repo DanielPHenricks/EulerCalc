@@ -1,4 +1,5 @@
 <script>
+  import Katex from "./katex.svelte";
   import { parse, compile, evaluate, round } from "mathjs";
   let isShown = false;
   let equation = "";
@@ -8,6 +9,7 @@
   const calcValues = () => {
     const expression = parse(equation);
     const compiledExpression = expression.compile();
+    allValues = [];
     let scope = {
       x: initialX,
       y: initialY,
@@ -36,22 +38,22 @@
         bind:value={equation}
         id="equation"
       />
-      <label for="xzero"> X0</label><input
+      <label for="xzero"><Katex math={"x_0"} /></label><input
         type="number"
         bind:value={initialX}
         id="xzero"
       />
-      <label for="yzero"> Y0</label><input
+      <label for="yzero"><Katex math={"y_0"} /></label><input
         type="number"
         bind:value={initialY}
         id="yzero"
       />
-      <label for="stepSize">Step Size</label><input
+      <label for="stepSize">Step Size - <Katex math={"h"} /></label><input
         type="number"
         bind:value={stepSize}
         id="stepSize"
       />
-      <label for="numSteps">Number of Steps</label><input
+      <label for="numSteps">Number of Steps - <Katex math={"n"} /></label><input
         type="number"
         bind:value={numSteps}
         id="numSteps"
@@ -60,6 +62,11 @@
     <button on:click={() => calcValues()}>Submit</button>
   {/if}
   {#if isShown}
+    <p>
+      Your equation was parsed as <Katex math={equation} />. If this is
+      incorrect, click this button:
+    </p>
+    <button on:click={() => (isShown = !isShown)}>Click</button>
     <table id="rounded-corner">
       <thead>
         <tr>
